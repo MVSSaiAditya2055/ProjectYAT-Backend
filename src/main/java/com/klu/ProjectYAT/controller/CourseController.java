@@ -39,6 +39,9 @@ public class CourseController {
         if (course.getTitle() != null) courseToUpdate.setTitle(course.getTitle());
         if (course.getDescription() != null) courseToUpdate.setDescription(course.getDescription());
         if (course.getModules() != null) courseToUpdate.setModules(course.getModules());
+        if (course.getAssignmentFileName() != null) courseToUpdate.setAssignmentFileName(course.getAssignmentFileName());
+        if (course.getAssignmentFileType() != null) courseToUpdate.setAssignmentFileType(course.getAssignmentFileType());
+        if (course.getAssignmentFileDataUrl() != null) courseToUpdate.setAssignmentFileDataUrl(course.getAssignmentFileDataUrl());
 
         Course updatedCourse = courseRepository.save(courseToUpdate);
         return ResponseEntity.ok(updatedCourse);

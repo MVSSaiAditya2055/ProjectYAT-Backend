@@ -21,6 +21,12 @@ public class Course {
     @Column(columnDefinition = "LONGTEXT")
     private String modules;
 
+    private String assignmentFileName;
+    private String assignmentFileType;
+    
+    @Column(columnDefinition = "LONGTEXT")
+    private String assignmentFileDataUrl;
+
     public Course() {}
 
     public Course(long id, String title, String description) {
@@ -67,5 +73,29 @@ public class Course {
 
     public void setModules(String modules) {
         this.modules = modules;
+    }
+
+    public String getAssignmentFileName() {
+        return assignmentFileName;
+    }
+
+    public void setAssignmentFileName(String assignmentFileName) {
+        this.assignmentFileName = assignmentFileName;
+    }
+
+    public String getAssignmentFileType() {
+        return assignmentFileType;
+    }
+
+    public void setAssignmentFileType(String assignmentFileType) {
+        this.assignmentFileType = assignmentFileType;
+    }
+
+    public String getAssignmentFileDataUrl() {
+        return assignmentFileDataUrl;
+    }
+
+    public void setAssignmentFileDataUrl(String assignmentFileDataUrl) {
+        this.assignmentFileDataUrl = assignmentFileDataUrl;
     }
 }
