@@ -61,7 +61,7 @@ public class AuthService {
             user.setVerified(true);
             user.setOtp(null);
             userRepo.save(user);
-            return "Verified successfully! User ID: " + user.getId();
+            return "Verified successfully";
         }
 
         return "Invalid OTP";
@@ -81,7 +81,7 @@ public class AuthService {
         }
 
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return "Login successful! User ID: " + user.getId();
+            return "Login successful!";
         }
 
         return "Invalid credentials";
