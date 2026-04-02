@@ -1,6 +1,7 @@
 package com.klu.ProjectYAT.model;
 
 import jakarta.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "student_course", uniqueConstraints = {
@@ -27,7 +28,7 @@ public class StudentCourse {
     private String feedback;
 
     @Column(name = "enrollment_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private long enrollmentDate = System.currentTimeMillis();
+    private Timestamp enrollmentDate = new Timestamp(System.currentTimeMillis());
 
     // No-args constructor
     public StudentCourse() {}
@@ -37,7 +38,7 @@ public class StudentCourse {
         this.student = student;
         this.course = course;
         this.marks = 0;
-        this.enrollmentDate = System.currentTimeMillis();
+        this.enrollmentDate = new Timestamp(System.currentTimeMillis());
     }
 
     // Getters and Setters
@@ -82,10 +83,10 @@ public class StudentCourse {
     }
 
     public long getEnrollmentDate() {
-        return enrollmentDate;
+        return enrollmentDate != null ? enrollmentDate.getTime() : 0;
     }
 
     public void setEnrollmentDate(long enrollmentDate) {
-        this.enrollmentDate = enrollmentDate;
+        this.enrollmentDate = new Timestamp(enrollmentDate);
     }
 }

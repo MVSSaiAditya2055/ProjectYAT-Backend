@@ -20,7 +20,7 @@ public class SecurityConfig {
         http.cors(cors -> cors.disable()) // Relying on CorsConfig globally
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/api/courses/**").permitAll()
+                .requestMatchers("/api/auth/**", "/api/courses/**", "/api/student-courses/**").permitAll()
                 .anyRequest().authenticated()
             );
         return http.build();
