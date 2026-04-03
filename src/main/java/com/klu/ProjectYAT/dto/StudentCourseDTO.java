@@ -9,6 +9,7 @@ public class StudentCourseDTO {
     private int marks;
     private String feedback;
     private long enrollmentDate;
+    private String submissionFilePath;
 
     // No-args constructor
     public StudentCourseDTO() {}
@@ -89,5 +90,13 @@ public class StudentCourseDTO {
 
     public void setEnrollmentDate(long enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
+    }
+
+    public String getSubmissionFilePath() {
+        return submissionFilePath;
+    }
+
+    public void setSubmissionFilePath(String submissionFilePath) {
+        this.submissionFilePath = submissionFilePath;
     }
 }

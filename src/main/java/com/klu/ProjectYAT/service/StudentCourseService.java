@@ -29,7 +29,7 @@ public class StudentCourseService {
 
     // Enroll a student in a course
     @Transactional
-    public StudentCourse enrollStudent(Long studentId, Long courseId) {
+    public StudentCourseDTO enrollStudent(Long studentId, Long courseId) {
         Optional<User> student = userRepository.findById(studentId);
         Optional<Course> course = courseRepository.findById(courseId);
 
@@ -46,7 +46,8 @@ public class StudentCourseService {
         }
 
         StudentCourse studentCourse = new StudentCourse(student.get(), course.get());
-        return studentCourseRepository.save(studentCourse);
+        StudentCourse saved = studentCourseRepository.save(studentCourse);
+        return convertToDTO(saved);
     }
 
     // Get all students in a course
@@ -56,7 +57,7 @@ public class StudentCourseService {
             throw new RuntimeException("Course not found");
         }
 
-        List<StudentCourse> enrollments = studentCourseRepository.findByCourseId(courseId);
+        List<StudentCourse> enrollments = studentCourseRepository.findByCourse_Id(courseId);
         return enrollments.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
@@ -69,7 +70,7 @@ public class StudentCourseService {
             throw new RuntimeException("Student not found");
         }
 
-        List<StudentCourse> enrollments = studentCourseRepository.findByStudentId(studentId);
+        List<StudentCourse> enrollments = studentCourseRepository.findByStudent_Id(studentId);
         return enrollments.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
@@ -122,7 +123,7 @@ public class StudentCourseService {
 
     // Convert StudentCourse to DTO
     private StudentCourseDTO convertToDTO(StudentCourse studentCourse) {
-        return new StudentCourseDTO(
+        StudentCourseDTO dto = new StudentCourseDTO(
             studentCourse.getId(),
             studentCourse.getStudent().getId(),
             studentCourse.getStudent().getName(),
@@ -132,5 +133,7 @@ public class StudentCourseService {
             studentCourse.getFeedback(),
             studentCourse.getEnrollmentDate()
         );
+        dto.setSubmissionFilePath(studentCourse.getSubmissionFilePath());
+        return dto;
     }
 }

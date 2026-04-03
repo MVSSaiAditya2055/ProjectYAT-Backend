@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.klu.ProjectYAT.dto.LoginRequest;
 import com.klu.ProjectYAT.dto.OTPRequest;
 import com.klu.ProjectYAT.dto.RegisterRequest;
 import com.klu.ProjectYAT.model.User;
@@ -67,23 +66,39 @@ public class AuthService {
         return "Invalid OTP";
     }
 
-    // LOGIN
-    public String login(LoginRequest request) {
+    // LOGIN — returns a Map so the frontend gets id, name, email, role in one shot
+    public java.util.Map<String, Object> login(com.klu.ProjectYAT.dto.LoginRequest request) {
+        java.util.Map<String, Object> response = new java.util.HashMap<>();
+        
         User user = userRepo.findByEmail(request.getEmail())
                 .orElse(null);
 
         if(user == null) {
-            return "Invalid credentials"; // "User not found" might be helpful, but we limit for security
+            response.put("success", false);
+            response.put("message", "Invalid credentials");
+            return response;
         }
 
         if (!user.isVerified()) {
-            return "Verify your account first!";
+            response.put("success", false);
+            response.put("message", "Verify your account first!");
+            return response;
         }
 
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return "Login successful!";
+            // Success — include everything the frontend needs to resolve identity
+            response.put("success", true);
+            response.put("message", "Login successful!");
+            response.put("id", user.getId());
+            response.put("userId", user.getId());
+            response.put("name", user.getName());
+            response.put("email", user.getEmail());
+            response.put("role", user.getRole());
+            return response;
         }
 
-        return "Invalid credentials";
+        response.put("success", false);
+        response.put("message", "Invalid credentials");
+        return response;
     }
 }

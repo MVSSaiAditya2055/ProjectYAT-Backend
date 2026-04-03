@@ -27,6 +27,9 @@ public class StudentCourse {
     @Column(columnDefinition = "LONGTEXT")
     private String feedback;
 
+    @Column(name = "submission_file_path")
+    private String submissionFilePath;
+
     @Column(name = "enrollment_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp enrollmentDate = new Timestamp(System.currentTimeMillis());
 
@@ -88,5 +91,13 @@ public class StudentCourse {
 
     public void setEnrollmentDate(long enrollmentDate) {
         this.enrollmentDate = new Timestamp(enrollmentDate);
+    }
+
+    public String getSubmissionFilePath() {
+        return submissionFilePath;
+    }
+
+    public void setSubmissionFilePath(String submissionFilePath) {
+        this.submissionFilePath = submissionFilePath;
     }
 }

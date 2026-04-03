@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.klu.ProjectYAT.dto.LoginRequest;
 import com.klu.ProjectYAT.dto.OTPRequest;
 import com.klu.ProjectYAT.dto.RegisterRequest;
 import com.klu.ProjectYAT.service.AuthService;
@@ -31,7 +30,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-        return authService.login(request);
+    public org.springframework.http.ResponseEntity<java.util.Map<String, Object>> login(@RequestBody com.klu.ProjectYAT.dto.LoginRequest request) {
+        java.util.Map<String, Object> response = authService.login(request);
+        if ((Boolean)response.get("success")) {
+            return org.springframework.http.ResponseEntity.ok(response);
+        } else {
+            return org.springframework.http.ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED).body(response);
+        }
     }
 }

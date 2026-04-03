@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import com.klu.ProjectYAT.service.StudentCourseService;
 import com.klu.ProjectYAT.dto.StudentCourseDTO;
 import com.klu.ProjectYAT.dto.UpdateMarksRequest;
-import com.klu.ProjectYAT.model.StudentCourse;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -21,7 +20,7 @@ public class StudentCourseController {
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollStudent(@RequestParam Long studentId, @RequestParam Long courseId) {
         try {
-            StudentCourse enrollment = studentCourseService.enrollStudent(studentId, courseId);
+            StudentCourseDTO enrollment = studentCourseService.enrollStudent(studentId, courseId);
             return ResponseEntity.ok(enrollment);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
