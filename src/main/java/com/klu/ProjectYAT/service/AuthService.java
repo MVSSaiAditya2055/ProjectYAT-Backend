@@ -81,7 +81,7 @@ public class AuthService {
         }
 
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return "Login successful! UserId: " + user.getId() + ", Role: " + user.getRole() + ", Name: " + user.getName();
+            return "Login successful!";
         }
 
         return "Invalid credentials";

@@ -23,9 +23,6 @@ public class Course {
 
     private String assignmentFileName;
     private String assignmentFileType;
-    
-    @Column(columnDefinition = "LONGTEXT")
-    private String assignmentFileDataUrl;
 
     public Course() {}
 
@@ -89,13 +86,5 @@ public class Course {
 
     public void setAssignmentFileType(String assignmentFileType) {
         this.assignmentFileType = assignmentFileType;
-    }
-
-    public String getAssignmentFileDataUrl() {
-        return assignmentFileDataUrl;
-    }
-
-    public void setAssignmentFileDataUrl(String assignmentFileDataUrl) {
-        this.assignmentFileDataUrl = assignmentFileDataUrl;
     }
 }

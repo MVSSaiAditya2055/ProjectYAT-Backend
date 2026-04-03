@@ -2,7 +2,6 @@ package com.klu.ProjectYAT.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +11,6 @@ import com.klu.ProjectYAT.dto.LoginRequest;
 import com.klu.ProjectYAT.dto.OTPRequest;
 import com.klu.ProjectYAT.dto.RegisterRequest;
 import com.klu.ProjectYAT.service.AuthService;
-import com.klu.ProjectYAT.model.User;
-import com.klu.ProjectYAT.repository.UserRepository;
-
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -24,9 +19,6 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-
-    @Autowired
-    private UserRepository userRepo;
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) throws Exception {
@@ -41,10 +33,5 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
         return authService.login(request);
-    }
-
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
     }
 }
