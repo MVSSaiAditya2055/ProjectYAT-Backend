@@ -27,6 +27,14 @@ public class StudentCourseService {
     @Autowired
     private CourseRepository courseRepository;
 
+    // Get all enrollments
+    public List<StudentCourseDTO> getAllEnrollments() {
+        List<StudentCourse> enrollments = studentCourseRepository.findAll();
+        return enrollments.stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+    }
+
     // Enroll a student in a course
     @Transactional
     public StudentCourseDTO enrollStudent(Long studentId, Long courseId) {

@@ -39,36 +39,30 @@ public class DataSeeder {
 
             Course springCourse = new Course();
             springCourse.setTitle("React Frontend Essentials");
-            springCourse.setDescription("Build modern UIs with React, JSX, state, and reusable components.");
             springCourse.setRegisteredStudents(0);
             springCourse.setModules(REACT_MODULES_JSON);
 
             Course reactCourse = new Course();
             reactCourse.setTitle("Modern JavaScript for Web Apps");
-            reactCourse.setDescription("Master JavaScript fundamentals, async programming, and DOM workflows.");
             reactCourse.setRegisteredStudents(0);
             reactCourse.setModules(JS_MODULES_JSON);
 
             Course nodeCourse = new Course();
             nodeCourse.setTitle("Node.js & Express Full-Stack APIs");
-            nodeCourse.setDescription("Create backend APIs, connect databases, and power full-stack applications.");
             nodeCourse.setRegisteredStudents(0);
             nodeCourse.setModules(NODE_MODULES_JSON);
 
             courseRepository.findByTitle(springCourse.getTitle()).ifPresentOrElse(existing -> {
-                existing.setDescription(springCourse.getDescription());
                 existing.setModules(REACT_MODULES_JSON);
                 courseRepository.save(existing);
             }, () -> courseRepository.save(springCourse));
 
             courseRepository.findByTitle(reactCourse.getTitle()).ifPresentOrElse(existing -> {
-                existing.setDescription(reactCourse.getDescription());
                 existing.setModules(JS_MODULES_JSON);
                 courseRepository.save(existing);
             }, () -> courseRepository.save(reactCourse));
 
             courseRepository.findByTitle(nodeCourse.getTitle()).ifPresentOrElse(existing -> {
-                existing.setDescription(nodeCourse.getDescription());
                 existing.setModules(NODE_MODULES_JSON);
                 courseRepository.save(existing);
             }, () -> courseRepository.save(nodeCourse));

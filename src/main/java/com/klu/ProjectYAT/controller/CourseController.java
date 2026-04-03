@@ -37,7 +37,6 @@ public class CourseController {
 
         Course courseToUpdate = existingCourse.get();
         if (course.getTitle() != null) courseToUpdate.setTitle(course.getTitle());
-        if (course.getDescription() != null) courseToUpdate.setDescription(course.getDescription());
         if (course.getModules() != null) courseToUpdate.setModules(course.getModules());
         if (course.getAssignmentFileName() != null) courseToUpdate.setAssignmentFileName(course.getAssignmentFileName());
         if (course.getAssignmentFileType() != null) courseToUpdate.setAssignmentFileType(course.getAssignmentFileType());

@@ -12,9 +12,6 @@ public class Course {
 
     private String title;
     
-    @Column(length = 2000)
-    private String description;
-
     @Column(name = "registered_students", columnDefinition = "integer default 0")
     private int registeredStudents = 0;
 
@@ -26,10 +23,9 @@ public class Course {
 
     public Course() {}
 
-    public Course(long id, String title, String description) {
+    public Course(long id, String title) {
         this.id = id;
         this.title = title;
-        this.description = description;
     }
 
     public long getId() {
@@ -46,14 +42,6 @@ public class Course {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getRegisteredStudents() {

@@ -16,6 +16,17 @@ public class StudentCourseController {
     @Autowired
     private StudentCourseService studentCourseService;
 
+    // Get all enrollments
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllEnrollments() {
+        try {
+            List<StudentCourseDTO> enrollments = studentCourseService.getAllEnrollments();
+            return ResponseEntity.ok(enrollments);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
     // Enroll a student in a course
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollStudent(@RequestParam Long studentId, @RequestParam Long courseId) {

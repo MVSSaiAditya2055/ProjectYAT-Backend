@@ -20,9 +20,28 @@ public class FileStorageService {
     @Value("${file.upload.submissions-dir}")
     private String submissionsDir;
 
+    @Value("${file.upload.videos-dir}")
+    private String videosDir;
+
     // ── Educator uploads an assignment question file ──────────────────────────
     public String storeAssignment(MultipartFile file, long courseId) throws IOException {
         Path dir = Paths.get(assignmentsDir, String.valueOf(courseId));
+        Files.createDirectories(dir);
+
+        String originalName = file.getOriginalFilename();
+        String ext = (originalName != null && originalName.contains("."))
+                ? originalName.substring(originalName.lastIndexOf('.'))
+                : "";
+        String storedName = UUID.randomUUID() + ext;
+
+        Files.copy(file.getInputStream(), dir.resolve(storedName),
+                StandardCopyOption.REPLACE_EXISTING);
+        return storedName;
+    }
+
+    // ── Educator uploads a video file ─────────────────────────────────────────
+    public String storeVideo(MultipartFile file, long courseId) throws IOException {
+        Path dir = Paths.get(videosDir, String.valueOf(courseId));
         Files.createDirectories(dir);
 
         String originalName = file.getOriginalFilename();
@@ -82,6 +101,16 @@ public class FileStorageService {
         Resource resource = new UrlResource(filePath.toUri());
         if (!resource.exists()) {
             throw new RuntimeException("Submission file not found: " + fileName);
+        }
+        return resource;
+    }
+
+    // ── Load a stored video file as a Resource ────────────────────────────────
+    public Resource loadVideo(long courseId, String fileName) throws MalformedURLException {
+        Path filePath = Paths.get(videosDir, String.valueOf(courseId), fileName);
+        Resource resource = new UrlResource(filePath.toUri());
+        if (!resource.exists()) {
+            throw new RuntimeException("Video file not found: " + fileName);
         }
         return resource;
     }
