@@ -27,7 +27,6 @@ public class StudentCourseController {
         }
     }
 
-    // Enroll a student in a course
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollStudent(@RequestParam Long studentId, @RequestParam Long courseId) {
         try {
@@ -38,7 +37,6 @@ public class StudentCourseController {
         }
     }
 
-    // Get all students in a course (for educator view)
     @GetMapping("/course/{courseId}")
     public ResponseEntity<?> getStudentsInCourse(@PathVariable Long courseId) {
         try {
@@ -49,7 +47,6 @@ public class StudentCourseController {
         }
     }
 
-    // Get all courses for a student
     @GetMapping("/student/{studentId}")
     public ResponseEntity<?> getCoursesForStudent(@PathVariable Long studentId) {
         try {
@@ -60,7 +57,6 @@ public class StudentCourseController {
         }
     }
 
-    // Update marks for a student in a course
     @PutMapping("/update-marks/{studentId}/{courseId}")
     public ResponseEntity<?> updateMarks(
             @PathVariable Long studentId,
@@ -68,18 +64,16 @@ public class StudentCourseController {
             @RequestBody UpdateMarksRequest request) {
         try {
             StudentCourseDTO updatedEnrollment = studentCourseService.updateMarks(
-                studentId,
-                courseId,
-                request.getMarks(),
-                request.getFeedback()
-            );
+                    studentId,
+                    courseId,
+                    request.getMarks(),
+                    request.getFeedback());
             return ResponseEntity.ok(updatedEnrollment);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
-    // Get enrollment details
     @GetMapping("/{enrollmentId}")
     public ResponseEntity<?> getEnrollment(@PathVariable Long enrollmentId) {
         try {
@@ -90,7 +84,6 @@ public class StudentCourseController {
         }
     }
 
-    // Delete enrollment
     @DeleteMapping("/{enrollmentId}")
     public ResponseEntity<?> deleteEnrollment(@PathVariable Long enrollmentId) {
         try {
@@ -101,7 +94,6 @@ public class StudentCourseController {
         }
     }
 
-    // Helper classes for responses
     public static class ErrorResponse {
         private String error;
 

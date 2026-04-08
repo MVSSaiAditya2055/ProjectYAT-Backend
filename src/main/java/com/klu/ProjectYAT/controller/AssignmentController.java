@@ -31,13 +31,6 @@ public class AssignmentController {
     @Autowired
     private StudentCourseRepository studentCourseRepository;
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // 1. Educator uploads an assignment question file
-    //    POST /api/assignments/upload/{courseId}
-    //    Form-data field: "file"
-    //    Saved to: uploads/assignments/{courseId}/{uuid}.ext
-    //    Course row: assignment_file_name + assignment_file_type updated
-    // ─────────────────────────────────────────────────────────────────────────
     @PostMapping("/upload/{courseId}")
     public ResponseEntity<Map<String, Object>> uploadAssignment(
             @PathVariable long courseId,
@@ -51,7 +44,6 @@ public class AssignmentController {
         try {
             String storedName = fileStorageService.storeAssignment(file, courseId);
 
-            // Relative path stored in DB (portable, frontend-friendly)
             String relativePath = "/assignments/" + courseId + "/" + storedName;
 
             Course course = courseOpt.get();
@@ -75,10 +67,6 @@ public class AssignmentController {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // 2. Download / serve an assignment question file
-    //    GET /api/assignments/download/{courseId}/{fileName}
-    // ─────────────────────────────────────────────────────────────────────────
     @GetMapping("/download/{courseId}/{fileName}")
     public ResponseEntity<Resource> downloadAssignment(
             @PathVariable long courseId,
@@ -96,13 +84,6 @@ public class AssignmentController {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // 3. Student submits an assignment file
-    //    POST /api/assignments/submit/{courseId}/{studentId}
-    //    Form-data field: "file"
-    //    Saved to: uploads/submissions/{courseId}/{studentId}/{uuid}.ext
-    //    student_course row: submission_file_path = /submissions/{courseId}/{studentId}/{uuid}.ext
-    // ─────────────────────────────────────────────────────────────────────────
     @PostMapping("/submit/{courseId}/{studentId}")
     public ResponseEntity<Map<String, Object>> submitAssignment(
             @PathVariable long courseId,
@@ -118,8 +99,8 @@ public class AssignmentController {
         String storedName = null;
 
         try {
-            Optional<StudentCourse> enrollmentOpt =
-                    studentCourseRepository.findByStudent_IdAndCourse_Id(studentId, courseId);
+            Optional<StudentCourse> enrollmentOpt = studentCourseRepository.findByStudent_IdAndCourse_Id(studentId,
+                    courseId);
 
             if (enrollmentOpt.isEmpty()) {
                 Map<String, Object> err = new HashMap<>();
@@ -157,10 +138,6 @@ public class AssignmentController {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // 4. Download a student's submission
-    //    GET /api/assignments/submission/{courseId}/{studentId}/{fileName}
-    // ─────────────────────────────────────────────────────────────────────────
     @GetMapping("/submission/{courseId}/{studentId}/{fileName}")
     public ResponseEntity<Resource> downloadSubmission(
             @PathVariable long courseId,

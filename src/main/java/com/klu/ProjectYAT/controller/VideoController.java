@@ -20,11 +20,6 @@ public class VideoController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // 1. Educator uploads a module video file
-    //    POST /api/videos/upload/{courseId}
-    //    Form-data field: "file"
-    // ─────────────────────────────────────────────────────────────────────────
     @PostMapping("/upload/{courseId}")
     public ResponseEntity<Map<String, Object>> uploadVideo(
             @PathVariable long courseId,
@@ -33,7 +28,6 @@ public class VideoController {
         try {
             String storedName = fileStorageService.storeVideo(file, courseId);
 
-            // This URL will be stored in the course modules JSON
             String streamUrl = "/api/videos/stream/" + courseId + "/" + storedName;
 
             Map<String, Object> resp = new HashMap<>();
@@ -50,10 +44,6 @@ public class VideoController {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // 2. Stream / serve a module video file
-    //    GET /api/videos/stream/{courseId}/{fileName}
-    // ─────────────────────────────────────────────────────────────────────────
     @GetMapping("/stream/{courseId}/{fileName}")
     public ResponseEntity<Resource> streamVideo(
             @PathVariable long courseId,
@@ -62,7 +52,7 @@ public class VideoController {
         try {
             Resource resource = fileStorageService.loadVideo(courseId, fileName);
             String contentType = "video/mp4"; // Default fallback
-            
+
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
