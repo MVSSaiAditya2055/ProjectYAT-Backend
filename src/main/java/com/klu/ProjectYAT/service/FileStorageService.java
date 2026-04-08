@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.UUID;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class FileStorageService {
@@ -23,10 +26,24 @@ public class FileStorageService {
     @Value("${file.upload.videos-dir}")
     private String videosDir;
 
+    private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
+
+    @PostConstruct
+    public void init() {
+        try {
+            logger.info("Assignment directory: {}", Paths.get(assignmentsDir).toAbsolutePath());
+            logger.info("Submission directory: {}", Paths.get(submissionsDir).toAbsolutePath());
+            logger.info("Videos directory: {}", Paths.get(videosDir).toAbsolutePath());
+        } catch (Exception e) {
+            logger.error("Error resolving absolute paths for upload directories", e);
+        }
+    }
+
     // ── Educator uploads an assignment question file ──────────────────────────
     public String storeAssignment(MultipartFile file, long courseId) throws IOException {
         Path dir = Paths.get(assignmentsDir, String.valueOf(courseId));
         Files.createDirectories(dir);
+        logger.info("Storage target directory: {}", dir.toAbsolutePath());
 
         String originalName = file.getOriginalFilename();
         String ext = (originalName != null && originalName.contains("."))
