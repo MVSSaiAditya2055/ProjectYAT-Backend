@@ -1,8 +1,0 @@
-target/
-.git/
-.gitignore
-.classpath
-.project
-.settings/
-uploads/
-*.log
