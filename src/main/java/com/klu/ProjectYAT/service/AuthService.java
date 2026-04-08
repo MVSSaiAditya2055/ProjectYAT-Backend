@@ -8,6 +8,7 @@ import com.klu.ProjectYAT.dto.OTPRequest;
 import com.klu.ProjectYAT.dto.RegisterRequest;
 import com.klu.ProjectYAT.model.User;
 import com.klu.ProjectYAT.repository.UserRepository;
+import com.klu.ProjectYAT.util.JwtUtil;
 
 @Service
 public class AuthService {
@@ -20,6 +21,9 @@ public class AuthService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // REGISTER
     public String register(RegisterRequest request) throws Exception {
@@ -87,6 +91,19 @@ public class AuthService {
 
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             // Success — include everything the frontend needs to resolve identity
+            String accessToken = jwtUtil.generateAccessToken(
+                    String.valueOf(user.getId()),
+                    user.getEmail(),
+                    user.getRole()
+            );
+            String refreshToken = jwtUtil.generateRefreshToken(
+                    String.valueOf(user.getId()),
+                    user.getEmail()
+            );
+            
+            long accessTokenExpiresAt = jwtUtil.getTokenExpiryTimestamp(accessToken);
+            long refreshTokenExpiresAt = jwtUtil.getTokenExpiryTimestamp(refreshToken);
+            
             response.put("success", true);
             response.put("message", "Login successful!");
             response.put("id", user.getId());
@@ -94,6 +111,11 @@ public class AuthService {
             response.put("name", user.getName());
             response.put("email", user.getEmail());
             response.put("role", user.getRole());
+            // NEW: Include tokens with expiry info for client-side session management
+            response.put("accessToken", accessToken);
+            response.put("refreshToken", refreshToken);
+            response.put("accessTokenExpiresAt", accessTokenExpiresAt);
+            response.put("refreshTokenExpiresAt", refreshTokenExpiresAt);
             return response;
         }
 
