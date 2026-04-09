@@ -96,6 +96,15 @@ public class AssignmentController {
             return ResponseEntity.badRequest().body(err);
         }
 
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || !(originalFilename.toLowerCase().endsWith(".pdf") || 
+                                           originalFilename.toLowerCase().endsWith(".doc") || 
+                                           originalFilename.toLowerCase().endsWith(".docx"))) {
+            Map<String, Object> err = new HashMap<>();
+            err.put("error", "Unsupported file format. Only PDF (.pdf) and Word documents (.doc, .docx) are allowed.");
+            return ResponseEntity.badRequest().body(err);
+        }
+
         String storedName = null;
 
         try {
