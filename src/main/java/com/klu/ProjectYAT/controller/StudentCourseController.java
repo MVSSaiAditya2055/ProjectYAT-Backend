@@ -8,7 +8,6 @@ import com.klu.ProjectYAT.dto.StudentCourseDTO;
 import com.klu.ProjectYAT.dto.UpdateMarksRequest;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/student-courses")
 public class StudentCourseController {
