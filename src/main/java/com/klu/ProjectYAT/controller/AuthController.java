@@ -1,7 +1,7 @@
 package com.klu.ProjectYAT.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +11,7 @@ import com.klu.ProjectYAT.dto.OTPRequest;
 import com.klu.ProjectYAT.dto.RegisterRequest;
 import com.klu.ProjectYAT.service.AuthService;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -19,8 +20,8 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+    public String register(@RequestBody RegisterRequest request) throws Exception {
+        return authService.register(request);
     }
 
     @PostMapping("/verify")

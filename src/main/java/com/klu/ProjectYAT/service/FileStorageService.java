@@ -34,7 +34,7 @@ public class FileStorageService {
             logger.info("Assignment directory: {}", Paths.get(assignmentsDir).toAbsolutePath());
             logger.info("Submission directory: {}", Paths.get(submissionsDir).toAbsolutePath());
             logger.info("Videos directory: {}", Paths.get(videosDir).toAbsolutePath());
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             logger.error("Error resolving absolute paths for upload directories", e);
         }
     }

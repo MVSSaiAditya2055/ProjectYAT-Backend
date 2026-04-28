@@ -1,7 +1,5 @@
 package com.klu.ProjectYAT.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,12 +10,8 @@ import com.klu.ProjectYAT.model.User;
 import com.klu.ProjectYAT.repository.UserRepository;
 import com.klu.ProjectYAT.util.JwtUtil;
 
-import jakarta.mail.MessagingException;
-
 @Service
 public class AuthService {
-
-    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     private UserRepository userRepo;
@@ -32,7 +26,7 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     // REGISTER
-    public String register(RegisterRequest request) {
+    public String register(RegisterRequest request) throws Exception {
 
         String otp = String.valueOf((int)(Math.random() * 9000) + 1000);
 
@@ -53,8 +47,8 @@ public class AuthService {
 
         try {
             emailService.sendOtp(user.getEmail(), otp);
-        } catch (MessagingException e) {
-            logger.error("Failed to send OTP email to {}", user.getEmail(), e);
+        } catch(Exception e) {
+            e.printStackTrace();
             return "Error sending OTP";
         }
 

@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.MessagingException;
 
 @Service
 public class EmailService {
@@ -14,7 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendOtp(String to, String otp) throws MessagingException {
+    public void sendOtp(String to, String otp) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setTo(to);

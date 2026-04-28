@@ -13,19 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/assignments")
 public class AssignmentController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AssignmentController.class);
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -64,10 +59,10 @@ public class AssignmentController {
             resp.put("courseId", courseId);
             return ResponseEntity.ok(resp);
 
-        } catch (IOException | RuntimeException e) {
+        } catch (Exception e) {
             Map<String, Object> err = new HashMap<>();
             err.put("error", "Failed to store assignment: " + e.getMessage());
-            logger.error("Failed to store assignment for course {}", courseId, e);
+            e.printStackTrace();
             return ResponseEntity.internalServerError().body(err);
         }
     }
@@ -84,8 +79,7 @@ public class AssignmentController {
                             "attachment; filename=\"" + resource.getFilename() + "\"")
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
-        } catch (IOException | RuntimeException e) {
-            logger.warn("Assignment not available for course {} and file {}", courseId, fileName, e);
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -142,13 +136,13 @@ public class AssignmentController {
             resp.put("studentId", studentId);
             return ResponseEntity.ok(resp);
 
-        } catch (IOException | RuntimeException t) {
+        } catch (Throwable t) {
             fileStorageService.deleteSubmissionQuietly(courseId, studentId, storedName);
 
             Map<String, Object> err = new HashMap<>();
             String msg = t.getMessage() != null ? t.getMessage() : t.getClass().getSimpleName();
             err.put("error", "Failed to store submission: " + msg);
-            logger.error("Failed to store submission for course {} and student {}", courseId, studentId, t);
+            t.printStackTrace();
             return ResponseEntity.internalServerError().body(err);
         }
     }
@@ -166,8 +160,7 @@ public class AssignmentController {
                             "attachment; filename=\"" + resource.getFilename() + "\"")
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
-        } catch (IOException | RuntimeException e) {
-            logger.warn("Submission not available for course {}, student {}, file {}", courseId, studentId, fileName, e);
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }

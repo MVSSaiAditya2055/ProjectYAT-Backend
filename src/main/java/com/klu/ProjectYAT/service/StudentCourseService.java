@@ -55,12 +55,6 @@ public class StudentCourseService {
 
         StudentCourse studentCourse = new StudentCourse(student.get(), course.get());
         StudentCourse saved = studentCourseRepository.save(studentCourse);
-
-        // Atomically increment student count in backend
-        Course c = course.get();
-        c.setRegisteredStudents(c.getRegisteredStudents() + 1);
-        courseRepository.save(c);
-
         return convertToDTO(saved);
     }
 
@@ -129,17 +123,10 @@ public class StudentCourseService {
     @Transactional
     // Delete enrollment
     public void deleteEnrollment(Long enrollmentId) {
-        Optional<StudentCourse> enrollment = studentCourseRepository.findById(enrollmentId);
-        if (enrollment.isEmpty()) {
+        if (!studentCourseRepository.existsById(enrollmentId)) {
             throw new RuntimeException("Enrollment not found");
         }
-        
-        Course course = enrollment.get().getCourse();
         studentCourseRepository.deleteById(enrollmentId);
-
-        // Atomically decrement student count in backend
-        course.setRegisteredStudents(Math.max(0, course.getRegisteredStudents() - 1));
-        courseRepository.save(course);
     }
 
     // Convert StudentCourse to DTO
