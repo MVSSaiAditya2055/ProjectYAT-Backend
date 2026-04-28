@@ -1,6 +1,7 @@
 package com.klu.ProjectYAT.util;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -81,7 +82,7 @@ public class JwtUtil {
             
             long expiryInMs = claims.getExpiration().getTime() - System.currentTimeMillis();
             return expiryInMs;
-        } catch (Exception e) {
+        } catch (JwtException e) {
             return -1; // Invalid or expired token
         }
     }
@@ -96,7 +97,7 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (Exception e) {
+        } catch (JwtException e) {
             return false;
         }
     }
@@ -112,7 +113,7 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();
-        } catch (Exception e) {
+        } catch (JwtException e) {
             return null;
         }
     }
@@ -128,7 +129,7 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
             return (String) claims.get("role");
-        } catch (Exception e) {
+        } catch (JwtException e) {
             return null;
         }
     }
@@ -144,7 +145,7 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getExpiration().getTime();
-        } catch (Exception e) {
+        } catch (JwtException e) {
             return -1;
         }
     }
