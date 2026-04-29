@@ -51,19 +51,12 @@ public class AuthService {
 
         userRepo.save(user);
 
-        try {
-            emailService.sendOtp(user.getEmail(), otp);
-            response.put("success", true);
-            response.put("message", "OTP sent to email. Check email for OTP.");
-            response.put("otpDeliveryStatus", "sent");
-        } catch (Exception e) {
-            // Account created but email delivery failed. Do NOT expose the OTP in the API response.
-            response.put("success", true);
-            response.put("message", "Account created, but OTP email could not be delivered. Contact support or configure email access.");
-            response.put("otpDeliveryStatus", "failed");
-            // Log the exception server-side so operators can debug SMTP issues
-            e.printStackTrace();
-        }
+        // Send OTP in the background
+        emailService.sendOtp(user.getEmail(), otp);
+
+        response.put("success", true);
+        response.put("message", "Account created successfully. Please check your email for the OTP.");
+        response.put("otpDeliveryStatus", "queued");
 
         return response;
     }
