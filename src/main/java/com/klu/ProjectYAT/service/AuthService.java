@@ -10,6 +10,9 @@ import com.klu.ProjectYAT.model.User;
 import com.klu.ProjectYAT.repository.UserRepository;
 import com.klu.ProjectYAT.util.JwtUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class AuthService {
 
@@ -26,13 +29,16 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     // REGISTER
-    public String register(RegisterRequest request) throws Exception {
+    public Map<String, Object> register(RegisterRequest request) {
 
         String otp = String.valueOf((int)(Math.random() * 9000) + 1000);
+        Map<String, Object> response = new HashMap<>();
 
         // Check if user already exists
         if(userRepo.findByEmail(request.getEmail()).isPresent()){
-            return "Email already exists";
+            response.put("success", false);
+            response.put("message", "Email already exists");
+            return response;
         }
 
         User user = new User();
@@ -47,12 +53,17 @@ public class AuthService {
 
         try {
             emailService.sendOtp(user.getEmail(), otp);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return "Error sending OTP";
+            response.put("success", true);
+            response.put("message", "OTP sent to email. Check email for OTP.");
+            response.put("otpDeliveryStatus", "sent");
+        } catch (Exception e) {
+            response.put("success", true);
+            response.put("message", "Account created, but OTP email could not be delivered. Check Railway logs or configure email access.");
+            response.put("otpDeliveryStatus", "failed");
+            response.put("otp", otp);
         }
 
-        return "OTP sent to email. Check email for OTP.";
+        return response;
     }
 
     // VERIFY OTP
