@@ -8,7 +8,6 @@ import com.klu.ProjectYAT.repository.CourseRepository;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
