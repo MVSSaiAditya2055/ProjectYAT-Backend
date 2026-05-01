@@ -1,6 +1,7 @@
 package com.klu.ProjectYAT.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ public class AuthService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Value("${app.demo-mode:false}")
+    private boolean demoMode;
 
     // REGISTER
     public Map<String, Object> register(RegisterRequest request) {
@@ -57,6 +61,11 @@ public class AuthService {
         response.put("success", true);
         response.put("message", "Account created successfully. Please check your email for the OTP.");
         response.put("otpDeliveryStatus", "queued");
+
+        // If demo mode is enabled, include the OTP in the response so the frontend can display it
+        if (demoMode) {
+            response.put("otp", otp);
+        }
 
         return response;
     }
